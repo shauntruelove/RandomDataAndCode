@@ -1,6 +1,5 @@
 # Get and Use ISO COdes
 
-
 # Install and load needed packages
 if(!require('dplyr')) install.packages('dplyr'); library(dplyr)
 if(!require('RCurl')) install.packages('RCurl'); library(RCurl)
@@ -20,7 +19,6 @@ source.path <- NULL
 tryCatch({
   source.path <- dirname(sys.frame(1)$ofile)
   }, error= function(x) print('Local Run'))
-
 
 # If run directly from file, this will give this file's path
 if (is.null(source.path)) {
@@ -253,4 +251,3 @@ get.who.region <- function(ISO){
 #     # Get WHO Regions using ISO
 #     return(as.character(iso_data$ [which(iso_data$ISO3==ISO)]))
 # }
-
