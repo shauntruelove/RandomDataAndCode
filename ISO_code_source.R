@@ -1,5 +1,3 @@
-# Get and Use ISO COdes
-
 # Install and load needed packages
 if(!require('dplyr')) install.packages('dplyr'); library(dplyr)
 if(!require('RCurl')) install.packages('RCurl'); library(RCurl)
