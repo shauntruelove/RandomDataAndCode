@@ -103,11 +103,16 @@ UNcode=as.vector(iso_data$ISO3166.1.numeric)
 Country=as.character(iso_data$official_name_en)
 Country2=as.character(iso_data$CLDR.display.name)
 
+# get rid of non-ASCII
+Country <- iconv(Country, from = 'UTF-8', to = 'ASCII//TRANSLIT')
+Country2 <- iconv(Country2, from = 'UTF-8', to = 'ASCII//TRANSLIT')
+
 Country[grep("Ivoire", Country)] <- "Cote d'Ivoire"
 Country2[grep("Ivoire", Country2)] <- "Cote d'Ivoire"
 Country[grep("Micronesia (Federated States of)", Country)] <- "Micronesia, Federated States of"
 
 Country[grep("Taiwan", Country2)] <- "Taiwan"
+Country2[grep("Saudi Arabia", Country)] <- "KSA"
 
 region.row <- as.integer(sapply(X=ISO3, FUN=function(X) which(toupper(region_data$alpha.3)==toupper(X))))
 who.row <-as.integer(sapply(X=ISO3, FUN=function(X) which(toupper(who_regions$iso)==toupper(X))))
@@ -168,6 +173,7 @@ get.iso <- function(country, ISO.only=T){
     
   } else {
     
+    country <- str_replace_all(country, "[[:punct:]]", "") # remove all punctuation
     country <- tolower(country)
     
     iso.row.tmp <- which(country==tolower(iso_data$Country) | country==tolower(iso_data$Country2))
