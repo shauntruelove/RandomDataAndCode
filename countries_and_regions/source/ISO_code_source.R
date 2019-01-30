@@ -55,8 +55,9 @@ if (has_internet) {
   tryCatch({
     iso_data <- read.csv("https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv", stringsAsFactors=F)
     region_data <- read.csv("https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv", stringsAsFactors=F)
-    who_regions <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/who_regions.csv', stringsAsFactors=FALSE)
-    dhs_countrydata <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/DHS_countrydata.csv', stringsAsFactors=FALSE)
+    who_regions <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/who_regions.csv', stringsAsFactors=FALSE)
+    dhs_countrydata <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/DHS_countrydata.csv', stringsAsFactors=FALSE)
+    nationality_data <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/nationalities_and_languages.csv', stringsAsFactors=FALSE)
   },
   error= function(x) print('No Internet Connection')
   )
@@ -70,6 +71,7 @@ if (has_internet) {
   write.csv(region_data, file.path(source.path.folder, 'region_data.csv'), row.names = FALSE)    
   write.csv(who_regions, file.path(source.path.folder, 'who_regions.csv'), row.names = FALSE)
   write.csv(dhs_countrydata, file.path(source.path.folder, 'dhs_countrydata.csv'), row.names = FALSE)
+  write.csv(nationality_data, file.path(source.path.folder, 'nationalities_and_languages.csv'), row.names = FALSE)
   
   
   # If not, use the local data
@@ -81,6 +83,7 @@ if (has_internet) {
     region_data <- read.csv(file.path(source.path.folder, 'region_data.csv'),  header=TRUE, stringsAsFactors=FALSE)
     who_regions <- read.csv(file.path(source.path.folder, 'who_regions.csv'),  header=TRUE, stringsAsFactors=FALSE)
     dhs_countrydata <- read.csv(file.path(source.path.folder, 'dhs_countrydata.csv'),  header=TRUE, stringsAsFactors=FALSE)
+    nationality_data <- read.csv(file.path(source.path.folder, 'nationalities_and_languages.csv'),  header=TRUE, stringsAsFactors=FALSE)
     
   } else {
     print('No access to internet/github and local files could not be located')
@@ -276,4 +279,53 @@ get.subregion <- function(ISO){
   return(as.character(iso_data$Sub.Region[match(toupper(ISO), iso_data$ISO3)]))
 }
 
+
+
+
+
+
+# Get ISO from nationality
+
+# Get ISO3 from Country Name
+get.iso.from.nationality <- function(nationality, ISO.only=T){
+  
+  nationality <- tolower(nationality)
+  
+  iso.row.tmp <- which(grep(nationality, tolower(nationality_data$Nationalities)) | nationality==tolower(nationality_data$Country))
+  if (length(iso.row.tmp)==0){
+    iso.row.tmp <- unique(c(grep(country, tolower(iso_data$Country)), grep(country, tolower(iso_data$Country2))))
+  }
+  
+  # Try matching individual words
+  country2 <- gsub(' {2,}',' ',country)
+  length.country <- length(strsplit(country2,' ')[[1]])
+  country2 <- gsub('\\(', '', country2) # Get rid of parentheses
+  country2 <- gsub('\\)', '', country2) # Get rid of parentheses
+  
+  if (length(iso.row.tmp)==0 & length.country>1){
+    country.words <- strsplit(country2,' ')[[1]]
+    matches <- lapply(country.words, grep, tolower(iso_data$Country)) # match each word of the country name with words in the iso data
+    match.row <- Reduce(intersect, matches)  # The match row is identified as the one for which matches of multiple word occurs (intersect)
+    
+    if (length(match.row)>0){
+      iso.row.tmp <- match.row
+    } else if (length(match.row)==0 & sum(unlist(matches))>0) {
+      iso.row.tmp <- as.integer(matches[which.min(lengths(matches))])  # Match row is the one with the least matches
+    }
+  }
+  
+  if (length(iso.row.tmp)==1){
+    if (ISO.only){
+      return(as.character(iso_data$ISO3[iso.row.tmp]))
+    } else{
+      return(as.vector(iso_data$ISO3[iso.row.tmp]))
+    }
+  } else if (length(iso.row.tmp==0)){
+    #print('ISO Not Found')
+    return('ISO Not Found')
+  } else if (length(iso.row.tmp>1)){
+    #print(paste0(length(iso.row.tmp),' ISO matches found for ', country))
+    return(paste0(length(iso.row.tmp),' ISO matches found for ', country))
+  }
+}
 
