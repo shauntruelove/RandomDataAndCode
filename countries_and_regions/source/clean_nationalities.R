@@ -1,9 +1,9 @@
 
 # Load nationalities and languages
-nationalities <- read_csv("C:/Users/shaun/Documents/GitHub/RandomDataAndCode/nationalities_and_languages.csv")
+nationalities <- read_csv("C:/Users/shaun/Documents/GitHub/RandomDataAndCode/countries_and_regions/data/nationalities_and_languages.csv")
 # source: https://www.vocabulary.cl/Basic/Nationalities.htm
 
-nationalities2 <- read_csv("C:/Users/shaun/Documents/GitHub/RandomDataAndCode/countries_and_demonyms.csv")
+nationalities2 <- read_csv("C:/Users/shaun/Documents/GitHub/RandomDataAndCode/countries_and_regions/data/countries_and_demonyms.csv")
 # source: https://www.worldatlas.com/articles/what-is-a-demonym-a-list-of-nationalities.html
 
 
@@ -34,7 +34,7 @@ for (i in 1:nrow(nationalities_)){
 nationalities_ <- nationalities_ %>% rename(Country=Country.x, Nationalities=nationalities) %>% select(-Country.y, -Demonym) %>% as.data.frame()
 
 # Save it
-write_csv(nationalities_, "C:/Users/shaun/Documents/GitHub/RandomDataAndCode/nationalities_and_languages.csv")
+write_csv(nationalities_, "C:/Users/shaun/Documents/GitHub/RandomDataAndCode/countries_and_regions/data/nationalities_and_languages.csv")
 
 
 

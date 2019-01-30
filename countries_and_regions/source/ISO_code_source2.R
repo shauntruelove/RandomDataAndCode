@@ -55,8 +55,9 @@ if (has_internet) {
   tryCatch({
     iso_data <- read.csv("https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv", stringsAsFactors=F)
     region_data <- read.csv("https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv", stringsAsFactors=F)
-    who_regions <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/who_regions.csv', stringsAsFactors=FALSE)
-    dhs_countrydata <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/DHS_countrydata.csv', stringsAsFactors=FALSE)
+    who_regions <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/who_regions.csv', stringsAsFactors=FALSE)
+    dhs_countrydata <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/DHS_countrydata.csv', stringsAsFactors=FALSE)
+    nationality_data <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/countries_and_nationalities.csv', stringsAsFactors=FALSE)
   },
   error= function(x) print('No Internet Connection')
   )
