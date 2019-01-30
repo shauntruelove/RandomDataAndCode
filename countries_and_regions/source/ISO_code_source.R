@@ -53,10 +53,10 @@ if (has_internet) {
   
   # Get ISO Country Codes
   tryCatch({
-    iso_data <- read.csv("https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv", stringsAsFactors=F)
-    region_data <- read.csv("https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv", stringsAsFactors=F)
-    who_regions <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/who_regions.csv', stringsAsFactors=FALSE)
-    dhs_countrydata <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/DHS_countrydata.csv', stringsAsFactors=FALSE)
+    iso_data         <- read.csv("https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv", stringsAsFactors=F)
+    region_data      <- read.csv("https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv", stringsAsFactors=F)
+    who_regions      <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/who_regions.csv', stringsAsFactors=FALSE)
+    dhs_countrydata  <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/DHS_countrydata.csv', stringsAsFactors=FALSE)
     nationality_data <- read.csv('https://raw.githubusercontent.com/shauntruelove/RandomDataAndCode/master/countries_and_regions/data/nationalities_and_languages.csv', stringsAsFactors=FALSE)
   },
   error= function(x) print('No Internet Connection')
@@ -106,6 +106,8 @@ Country2=as.character(iso_data$CLDR.display.name)
 Country[grep("Ivoire", Country)] <- "Cote d'Ivoire"
 Country2[grep("Ivoire", Country2)] <- "Cote d'Ivoire"
 Country[grep("Micronesia (Federated States of)", Country)] <- "Micronesia, Federated States of"
+
+Country[grep("Taiwan", Country2)] <- "Taiwan"
 
 region.row <- as.integer(sapply(X=ISO3, FUN=function(X) which(toupper(region_data$alpha.3)==toupper(X))))
 who.row <-as.integer(sapply(X=ISO3, FUN=function(X) which(toupper(who_regions$iso)==toupper(X))))
